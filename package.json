@@ -7,8 +7,12 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^13.5.0",
+    "bootstrap": "^5.3.8",
+    "bootstrap-icons": "^1.13.1",
+    "qrcode.react": "^4.2.0",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4",
+    "react-bootstrap": "^2.10.10",
+    "react-router-dom": "^7.13.1",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
@@ -16,7 +20,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "clean:local": "rm -rf node_modules build",
+    "zip:submission": "bash scripts/prepare_submission.sh"
   },
   "eslintConfig": {
     "extends": [

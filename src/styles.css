@@ -1,0 +1,126 @@
+body {
+  background-color: #f4f6f9;
+}
+
+.navbar-gradient {
+  background: linear-gradient(90deg, #0d6efd, #20c997) !important;
+}
+
+.login-tower {
+  min-height: 82vh;
+  border-left: 8px solid red;
+  border-right: 8px solid red;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.dash-card {
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.dash-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.1);
+}
+
+.card-accent-primary .card-header {
+  background: linear-gradient(90deg, #0d6efd, #6ea8fe);
+  color: #fff;
+}
+.card-accent-info .card-header {
+  background: linear-gradient(90deg, #0dcaf0, #31d2f2);
+  color: #fff;
+}
+
+.metro-map {
+  position: relative;
+  padding: 40px 10px 10px 10px;
+  min-height: 120px;
+}
+
+.metro-line {
+  position: absolute;
+  top: 60px;
+  left: 5%;
+  right: 5%;
+  height: 6px;
+  background: linear-gradient(90deg, #0d6efd, #20c997);
+  border-radius: 6px;
+}
+
+.stations {
+  position: relative;
+  width: 90%;
+  margin: 0 auto;
+  height: 60px;
+}
+
+.station {
+  position: absolute;
+  top: 40px;
+  transform: translateX(-50%);
+  text-align: center;
+}
+
+.station-dot {
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #6c757d;
+}
+.station-dot.active {
+  color: #0d6efd;
+}
+
+.station-label {
+  font-size: 12px;
+  margin-top: 6px;
+  color: #6c757d;
+  white-space: nowrap;
+}
+.station-label.active {
+  color: #0d6efd;
+  font-weight: 600;
+}
+
+.ticket-card {
+  border-radius: 0.75rem;
+}
+
+.perforation {
+  height: 10px;
+  background-image: radial-gradient(circle, rgba(0,0,0,.15) 2px, transparent 2px);
+  background-size: 12px 12px;
+  background-position: 0 0;
+}
+
+.ticket-summary .label {
+  font-size: 12px;
+  color: #6c757d;
+}
+.ticket-summary .value {
+  font-weight: 600;
+}
+
+.ticket-info-row > div {
+  margin-bottom: 0.35rem;
+}
+
+.container {
+  max-width: 1440px;
+}
+
+.ticket-summary .value {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.dash-card {
+  min-height: 560px;
+}
+
+.ticket-card {
+  border-left: 4px solid #0d6efd;
+}
