@@ -5,6 +5,7 @@ import TicketConfirm from './pages/TicketConfirm';
 import TicketSuccess from './pages/TicketSuccess';
 import MetroMapPage from './pages/MetroMap';
 import BookTicketPage from './pages/BookTicket';
+import AssistantSidebar from './components/AssistantSidebar';
 import './styles.css';
 
 function RequireAuth({ children }) {
@@ -26,6 +27,7 @@ function App() {
         <Route path="/success" element={<RequireAuth><TicketSuccess /></RequireAuth>} />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
+      <AssistantSidebar />
     </BrowserRouter>
   );
 }

@@ -49,10 +49,13 @@ Time: ${timeStr}`
                 <Col md={7}>
                   <div className="mb-2"><i className="bi bi-upc-scan me-2"></i>Ticket ID: <strong className="fs-5">{state.id}</strong></div>
                   <div className="mb-1"><i className="bi bi-person me-2"></i>Passenger: <strong className="fs-5">{state.passenger}</strong></div>
+                  <div className="mb-1"><i className="bi bi-diagram-3 me-2"></i>Line: <strong className="fs-5">{state.line}</strong></div>
                   <div className="mb-1"><i className="bi bi-geo-alt me-2"></i>From: <strong className="fs-5">{state.from}</strong></div>
                   <div className="mb-1"><i className="bi bi-geo me-2"></i>To: <strong className="fs-5">{state.to}</strong></div>
+                  <div className="mb-1"><i className="bi bi-signpost-split me-2"></i>Stops: <strong className="fs-5">{state.stops}</strong></div>
                   <div className="mb-1"><i className="bi bi-ticket-perforated me-2"></i>Tickets: <strong className="fs-5">{state.quantity || 1}</strong></div>
-                  <div className="mb-3"><i className="bi bi-currency-rupee me-2"></i>Fare: <strong className="fs-5">{state.fare?.toFixed ? state.fare.toFixed(2) : state.fare}</strong></div>
+                  <div className="mb-1"><i className="bi bi-cash-stack me-2"></i>Fare per ticket: <strong className="fs-5">{state.farePerTicket?.toFixed ? state.farePerTicket.toFixed(2) : state.farePerTicket}</strong></div>
+                  <div className="mb-3"><i className="bi bi-currency-rupee me-2"></i>Total Fare: <strong className="fs-5">{state.fare?.toFixed ? state.fare.toFixed(2) : state.fare}</strong></div>
                   <div className="mb-1"><i className="bi bi-calendar3 me-2"></i>Date: <strong className="fs-5">{new Date(state.time).toLocaleDateString()}</strong></div>
                   <div className="mb-3"><i className="bi bi-clock me-2"></i>Time: <strong className="fs-5">{new Date(state.time).toLocaleTimeString()}</strong></div>
                   <div className="d-flex gap-2 mt-2">

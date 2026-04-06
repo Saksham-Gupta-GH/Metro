@@ -1,11 +1,15 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Card, Row, Col, Button } from 'react-bootstrap';
+import { useState } from 'react';
 import AppNavbar from '../components/Navbar';
 import { metroLines } from '../data/metroLines';
+import { apiRequest } from '../lib/api';
 
 function TicketConfirm() {
   const { state } = useLocation();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   if (!state) {
     return (
@@ -24,19 +28,39 @@ function TicketConfirm() {
   const farePerTicket = Math.max(10, stops * 10);
   const fareTotal = farePerTicket * quantity;
 
-  const confirm = () => {
-    const id = `MT-${Date.now().toString(36).toUpperCase()}`;
-    navigate('/success', {
-      state: {
-        id,
-        passenger,
-        from,
-        to,
-        quantity,
-        fare: Number(fareTotal.toFixed(2)),
-        time: new Date().toISOString(),
-      },
-    });
+  const confirm = async () => {
+    let metroUser = {};
+
+    try {
+      metroUser = JSON.parse(localStorage.getItem('metroUser') || '{}');
+    } catch (parseError) {
+      metroUser = {};
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const data = await apiRequest('/api/tickets', {
+        method: 'POST',
+        body: JSON.stringify({
+          passenger,
+          email: metroUser.email,
+          line,
+          from,
+          to,
+          quantity,
+        }),
+      });
+
+      navigate('/success', {
+        state: data.ticket,
+      });
+    } catch (apiError) {
+      setError(apiError.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const cancel = () => navigate('/dashboard');
@@ -63,9 +87,12 @@ function TicketConfirm() {
               </Col>
               <Col xs={12}>
                 <div className="perforation rounded-3 my-2"></div>
+                {error ? <div className="alert alert-danger">{error}</div> : null}
                 <div className="text-end mt-2">
                   <Button size="lg" variant="secondary" className="me-2" onClick={cancel}>Cancel</Button>
-                  <Button size="lg" onClick={confirm}>Confirm Ticket</Button>
+                  <Button size="lg" onClick={confirm} disabled={loading}>
+                    {loading ? 'Confirming...' : 'Confirm Ticket'}
+                  </Button>
                 </div>
               </Col>
             </Row>
