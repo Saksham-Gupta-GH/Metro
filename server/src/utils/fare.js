@@ -12,6 +12,13 @@ function getStops(line, from, to) {
   return Math.abs(fromIndex - toIndex);
 }
 
+function findLineForStations(from, to) {
+  return Object.keys(metroLines).find((line) => {
+    const stations = metroLines[line] || [];
+    return stations.includes(from) && stations.includes(to);
+  });
+}
+
 function calculateFare(line, from, to, quantity) {
   const stops = getStops(line, from, to);
   const farePerTicket = Math.max(10, stops * 10);
@@ -26,5 +33,6 @@ function calculateFare(line, from, to, quantity) {
 
 module.exports = {
   getStops,
+  findLineForStations,
   calculateFare,
 };

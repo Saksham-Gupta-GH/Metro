@@ -1,13 +1,25 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Card, Button, Row, Col } from 'react-bootstrap';
+import { Card, Button, Row, Col, Container } from 'react-bootstrap';
 import { QRCodeSVG } from 'qrcode.react';
 import AppNavbar from '../components/Navbar';
+import {
+  FaArrowLeft,
+  FaCalendarDay,
+  FaCircleCheck,
+  FaClock,
+  FaLocationDot,
+  FaMapLocationDot,
+  FaMoneyBillWave,
+  FaQrcode,
+  FaTicket,
+  FaUser,
+} from 'react-icons/fa6';
 
 function TicketSuccess() {
   const { state } = useLocation();
   const navigate = useNavigate();
   const back = () => navigate('/dashboard');
-  const another = () => navigate('/dashboard');
+  const another = () => navigate('/book');
 
   const qrData = state
     ? (() => {
@@ -34,49 +46,88 @@ Time: ${timeStr}`
 
   return (
     <>
-      <AppNavbar />
-      <div className="container py-5 d-flex justify-content-center">
-        <Card className="shadow-lg rounded-3 ticket-card" style={{ maxWidth: 1100, width: '100%' }}>
-          <Card.Header className="bg-success bg-gradient text-white">
-            <div className="d-flex align-items-center gap-2">
-              <i className="bi bi-check-circle-fill"></i>
-              <span>Ticket Confirmed</span>
-            </div>
-          </Card.Header>
-          <Card.Body className="p-4">
-            {state ? (
-              <Row className="g-4">
-                <Col md={7}>
-                  <div className="mb-2"><i className="bi bi-upc-scan me-2"></i>Ticket ID: <strong className="fs-5">{state.id}</strong></div>
-                  <div className="mb-1"><i className="bi bi-person me-2"></i>Passenger: <strong className="fs-5">{state.passenger}</strong></div>
-                  <div className="mb-1"><i className="bi bi-diagram-3 me-2"></i>Line: <strong className="fs-5">{state.line}</strong></div>
-                  <div className="mb-1"><i className="bi bi-geo-alt me-2"></i>From: <strong className="fs-5">{state.from}</strong></div>
-                  <div className="mb-1"><i className="bi bi-geo me-2"></i>To: <strong className="fs-5">{state.to}</strong></div>
-                  <div className="mb-1"><i className="bi bi-signpost-split me-2"></i>Stops: <strong className="fs-5">{state.stops}</strong></div>
-                  <div className="mb-1"><i className="bi bi-ticket-perforated me-2"></i>Tickets: <strong className="fs-5">{state.quantity || 1}</strong></div>
-                  <div className="mb-1"><i className="bi bi-cash-stack me-2"></i>Fare per ticket: <strong className="fs-5">{state.farePerTicket?.toFixed ? state.farePerTicket.toFixed(2) : state.farePerTicket}</strong></div>
-                  <div className="mb-3"><i className="bi bi-currency-rupee me-2"></i>Total Fare: <strong className="fs-5">{state.fare?.toFixed ? state.fare.toFixed(2) : state.fare}</strong></div>
-                  <div className="mb-1"><i className="bi bi-calendar3 me-2"></i>Date: <strong className="fs-5">{new Date(state.time).toLocaleDateString()}</strong></div>
-                  <div className="mb-3"><i className="bi bi-clock me-2"></i>Time: <strong className="fs-5">{new Date(state.time).toLocaleTimeString()}</strong></div>
-                  <div className="d-flex gap-2 mt-2">
-                    <Button size="lg" onClick={back}>Back to Dashboard</Button>
-                    <Button size="lg" variant="secondary" onClick={another}>Book Another Ticket</Button>
-                  </div>
-                </Col>
-                <Col md={5} className="d-flex flex-column align-items-center">
-                  <div className="text-muted small text-center mb-2">Scan to verify ticket</div>
-                  <div className="p-3 bg-light rounded-3 shadow-sm">
-                    <QRCodeSVG value={qrData} size={200} bgColor="#ffffff" fgColor="#212529" includeMargin={false} />
-                  </div>
-                </Col>
-              </Row>
-            ) : (
-              <div>No ticket data.</div>
-            )}
-          </Card.Body>
-          <div className="perforation rounded-bottom"></div>
-        </Card>
-      </div>
+      <AppNavbar title="Ticket Confirmed" />
+      <main className="app-main-content">
+        <Container fluid>
+          <div className="page-section-intro mb-4">
+            <div className="page-eyebrow">Booking Complete</div>
+            <p className="page-subtitle mb-0">Your metro ticket is ready to use and can be verified from the QR panel.</p>
+          </div>
+
+          <Row className="justify-content-center">
+            <Col xxl={10}>
+              <Card className="ticket-card">
+                <Card.Header className="section-card-header">
+                  <FaCircleCheck />
+                  <span>Booking Success</span>
+                </Card.Header>
+                <Card.Body className="p-4">
+                  {state ? (
+                    <Row className="g-4 summary-grid">
+                      <Col lg={7}>
+                        <div className="ticket-id-chip mb-3">
+                          <FaTicket />
+                          Ticket ID: {state.id}
+                        </div>
+                        <div className="mb-2 d-flex align-items-center gap-2"><FaUser /> Passenger: <strong>{state.passenger}</strong></div>
+                        <div className="mb-2 d-flex align-items-center gap-2"><FaMapLocationDot /> Line: <strong>{state.line}</strong></div>
+                        <div className="mb-2 d-flex align-items-center gap-2"><FaLocationDot /> From: <strong>{state.from}</strong></div>
+                        <div className="mb-2 d-flex align-items-center gap-2"><FaLocationDot /> To: <strong>{state.to}</strong></div>
+                        <div className="mb-2 d-flex align-items-center gap-2"><FaTicket /> Tickets: <strong>{state.quantity || 1}</strong></div>
+                        <div className="mb-2 d-flex align-items-center gap-2">
+                          <FaMoneyBillWave />
+                          Fare per ticket:
+                          <strong>{state.farePerTicket?.toFixed ? state.farePerTicket.toFixed(2) : state.farePerTicket}</strong>
+                        </div>
+                        <div className="mb-2 d-flex align-items-center gap-2">
+                          <FaMoneyBillWave />
+                          Total Fare:
+                          <strong>{state.fare?.toFixed ? state.fare.toFixed(2) : state.fare}</strong>
+                        </div>
+                        {state.discountCode ? (
+                          <div className="mb-2 d-flex align-items-center gap-2">
+                            <FaTicket />
+                            Discount Code:
+                            <strong>{state.discountCode}</strong>
+                          </div>
+                        ) : null}
+                        <div className="mb-2 d-flex align-items-center gap-2"><FaCalendarDay /> Date: <strong>{new Date(state.time).toLocaleDateString()}</strong></div>
+                        <div className="mb-3 d-flex align-items-center gap-2"><FaClock /> Time: <strong>{new Date(state.time).toLocaleTimeString()}</strong></div>
+                        <div className="d-flex flex-wrap gap-2 mt-3">
+                          <Button onClick={back} className="d-inline-flex align-items-center gap-2 px-4">
+                            <FaArrowLeft />
+                            Back to Dashboard
+                          </Button>
+                          <Button variant="outline-primary" onClick={another} className="d-inline-flex align-items-center gap-2 px-4">
+                            <FaTicket />
+                            Book Another Ticket
+                          </Button>
+                        </div>
+                      </Col>
+                      <Col lg={5} className="d-flex flex-column align-items-center justify-content-center">
+                        <Card className="w-100">
+                          <Card.Body className="p-4 text-center">
+                            <div className="small text-muted mb-3 d-flex align-items-center justify-content-center gap-2">
+                              <FaQrcode />
+                              Scan to verify ticket
+                            </div>
+                            <div className="p-3 rounded-3 bg-light d-inline-block">
+                              <QRCodeSVG value={qrData} size={200} bgColor="#ffffff" fgColor="#212529" includeMargin={false} />
+                            </div>
+                          </Card.Body>
+                        </Card>
+                      </Col>
+                    </Row>
+                  ) : (
+                    <div className="feedback-message error mb-0">No ticket data available.</div>
+                  )}
+                </Card.Body>
+                <div className="perforation rounded-bottom"></div>
+              </Card>
+            </Col>
+          </Row>
+        </Container>
+      </main>
     </>
   );
 }

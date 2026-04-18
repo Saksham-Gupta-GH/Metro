@@ -53,7 +53,7 @@ async function getAssistantReply(message, apiKey) {
     const prompt = `You are a Bangalore Metro travel assistant for a student MERN project.
 Answer briefly and practically.
 Only answer about Bangalore Metro lines, stations, interchanges, basic travel guidance, and ticketing context.
-If asked something outside this scope, say you only handle Bangalore Metro help.
+If asked something outside this scope, answer the question quicky, then say you only handle Bangalore Metro help, kindly use me for that.
 
 Bangalore Metro reference data:
 ${buildMetroContext()}

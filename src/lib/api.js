@@ -1,17 +1,16 @@
+import api from '../services/api';
+
 export async function apiRequest(path, options = {}) {
-  const response = await fetch(path, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options.headers || {}),
-    },
-    ...options,
-  });
+  try {
+    const response = await api({
+      url: path,
+      method: options.method || 'get',
+      data: options.body ? JSON.parse(options.body) : options.data,
+      headers: options.headers || {},
+    });
 
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    throw new Error(data.message || 'Request failed.');
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || error.message || 'Request failed.');
   }
-
-  return data;
 }

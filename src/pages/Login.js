@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { Card, Form, Button } from 'react-bootstrap';
+import { Card, Form, Button, FloatingLabel } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import AppNavbar from '../components/Navbar';
+import { FaRightToBracket, FaTrainSubway, FaUserPlus } from 'react-icons/fa6';
 import { apiRequest } from '../lib/api';
+import { isAdminUser, setStoredUser } from '../utils/session';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [signupRole, setSignupRole] = useState('user');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -30,7 +32,7 @@ function Login() {
       const path = mode === 'signup' ? '/api/auth/signup' : '/api/auth/login';
       const payload =
         mode === 'signup'
-          ? { email, username, password }
+          ? { email, username, password, role: signupRole }
           : { email, password };
 
       const data = await apiRequest(path, {
@@ -38,9 +40,9 @@ function Login() {
         body: JSON.stringify(payload),
       });
 
-      localStorage.setItem('metroUser', JSON.stringify(data.user));
+      setStoredUser(data.user);
       setMessage(data.message);
-      navigate('/dashboard', { replace: true });
+      navigate(isAdminUser(data.user) ? '/admin/dashboard' : '/dashboard', { replace: true });
     } catch (apiError) {
       setError(apiError.message);
     } finally {
@@ -49,81 +51,102 @@ function Login() {
   };
 
   return (
-    <>
-      <AppNavbar />
-      <div className="vh-100 d-flex justify-content-center align-items-center" style={{ background: 'linear-gradient(180deg,#f4f6f9,#e9f5ff)' }}>
-        <Card style={{ maxWidth: 520, width: '100%' }} className="shadow-lg rounded-3 p-2 login-tower">
-          <Card.Body className="p-5 d-flex flex-column justify-content-center">
-            <div className="text-center mb-3">
-              <i className="bi bi-train-front fs-1 text-primary d-block mb-1"></i>
-              <h4 className="mb-0 fs-2">Intelligent Metro Network</h4>
-              <div className="text-muted">Metro Ticket Booking System</div>
-            </div>
-            <div className="d-flex justify-content-center gap-2 mb-3">
+    <div className="auth-page">
+      <Card className="auth-card p-1">
+        <Card.Body className="p-4 p-md-5">
+          <div className="text-center mb-4">
+            <div className="auth-brand-icon"><FaTrainSubway /></div>
+            <div className="auth-brand-title">Intelligent Metro Network</div>
+            <p className="text-muted mb-0 mt-2">Modern metro ticketing for Bangalore commuters.</p>
+          </div>
+
+          <div className="auth-mode-heading text-center mb-3">
+            {mode === 'signup' ? 'Create your account' : 'Log in to continue'}
+          </div>
+
+          <Form onSubmit={onSubmit}>
+            {error ? <div className="feedback-message error mb-3">{error}</div> : null}
+            {message ? <div className="feedback-message success mb-3">{message}</div> : null}
+            <FloatingLabel controlId="emailInput" label="Email address" className="mb-3">
+              <Form.Control
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="name@example.com"
+              />
+            </FloatingLabel>
+
+            {mode === 'signup' ? (
+              <FloatingLabel controlId="usernameInput" label="Username" className="mb-3">
+                <Form.Control
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Choose username"
+                />
+              </FloatingLabel>
+            ) : null}
+
+            {mode === 'signup' ? (
+              <FloatingLabel controlId="roleInput" label="Account Type" className="mb-3">
+                <Form.Select value={signupRole} onChange={(e) => setSignupRole(e.target.value)}>
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </Form.Select>
+              </FloatingLabel>
+            ) : null}
+
+            <FloatingLabel controlId="passwordInput" label="Password" className="mb-3">
+              <Form.Control
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+              />
+            </FloatingLabel>
+
+            <div className="d-grid mt-4">
               <Button
-                variant={mode === 'login' ? 'primary' : 'outline-primary'}
+                type="submit"
+                disabled={loading}
+                variant="dark"
+                className="d-inline-flex align-items-center justify-content-center gap-2 py-2 auth-submit-btn"
+              >
+                {mode === 'signup' ? <FaUserPlus /> : <FaRightToBracket />}
+                {loading ? 'Please wait...' : mode === 'signup' ? 'Create Account' : 'Login'}
+              </Button>
+            </div>
+          </Form>
+
+          <div className="text-center mt-4">
+            {mode === 'signup' ? (
+              <button
+                type="button"
+                className="auth-toggle-link"
                 onClick={() => {
                   setMode('login');
                   setError('');
                   setMessage('');
                 }}
-                type="button"
               >
-                Login
-              </Button>
-              <Button
-                variant={mode === 'signup' ? 'primary' : 'outline-primary'}
+                Already have an account? Login
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="auth-toggle-link"
                 onClick={() => {
                   setMode('signup');
                   setError('');
                   setMessage('');
                 }}
-                type="button"
               >
-                Sign Up
-              </Button>
-            </div>
-            <Form onSubmit={onSubmit}>
-              {error ? <div className="alert alert-danger py-2">{error}</div> : null}
-              {message ? <div className="alert alert-success py-2">{message}</div> : null}
-              <Form.Group className="mb-3">
-                <Form.Label>Email</Form.Label>
-                <Form.Control size="lg"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter email"
-                />
-              </Form.Group>
-              {mode === 'signup' ? (
-                <Form.Group className="mb-3">
-                  <Form.Label>Username</Form.Label>
-                  <Form.Control size="lg"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Choose username"
-                  />
-                </Form.Group>
-              ) : null}
-              <Form.Group className="mb-3">
-                <Form.Label>Password</Form.Label>
-                <Form.Control size="lg"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter password"
-                />
-              </Form.Group>
-              <div className="d-grid">
-                <Button size="lg" type="submit" disabled={loading}>
-                  {loading ? 'Please wait...' : mode === 'signup' ? 'Create Account' : 'Login'}
-                </Button>
-              </div>
-            </Form>
-          </Card.Body>
-        </Card>
-      </div>
-    </>
+                Need an account? Register
+              </button>
+            )}
+          </div>
+        </Card.Body>
+      </Card>
+    </div>
   );
 }
 

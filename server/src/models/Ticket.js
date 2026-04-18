@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const ticketSchema = new mongoose.Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
     ticketId: {
       type: String,
       required: true,
@@ -51,6 +55,30 @@ const ticketSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: 0,
+    },
+    discountCode: {
+      type: String,
+      trim: true,
+      default: '',
+    },
+    discountAmount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    originalFare: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    status: {
+      type: String,
+      enum: ['Confirmed', 'Cancelled'],
+      default: 'Confirmed',
+    },
+    cancelledAt: {
+      type: Date,
+      default: null,
     },
   },
   {
