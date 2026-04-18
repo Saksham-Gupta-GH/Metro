@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/authRoutes');
@@ -54,6 +55,15 @@ app.use('/api/announcements', announcementsRoutes);
 app.use('/api/discounts', discountRoutes);
 app.use('/api/notifications', notificationsRoutes);
 app.use('/api/feedback', feedbackRoutes);
+
+// Serving static files from React build folder
+const buildPath = path.join(__dirname, '../../build');
+app.use(express.static(buildPath));
+
+// Catch-all route for React's client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(buildPath, 'index.html'));
+});
 
 app.use((error, req, res, next) => {
   console.error(error);

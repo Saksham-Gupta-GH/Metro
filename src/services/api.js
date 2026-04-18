@@ -13,7 +13,7 @@ function getStoredUser() {
 }
 
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || '',
+  baseURL: '',
 });
 
 api.interceptors.request.use((config) => {
